@@ -19,7 +19,6 @@ export default function Book({ book }) {
           </Box>
           <Typography fontSize="inherit">{book.stock} books left</Typography>
         </Box>
-
         <IconButton>
           <AddIcon fontSize="inherit" />
         </IconButton>

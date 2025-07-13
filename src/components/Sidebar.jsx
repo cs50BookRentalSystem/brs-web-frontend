@@ -9,7 +9,7 @@ import {
 
 export default function Sidebar() {
   return (
-    <Drawer variant="permanent" anchor="left">
+    <Drawer variant="permanent" anchor="left" sx={{ flexShrink: 0 }}>
       <Box sx={{ width: 240, position: "relative" }}>
         <Box
           component="img"

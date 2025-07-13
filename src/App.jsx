@@ -5,6 +5,7 @@ import { Box } from "@mui/material";
 import { grey } from "@mui/material/colors";
 
 import Header from "./components/Header";
+import Sidebar from "./components/Sidebar";
 
 export const AppContext = createContext();
 
@@ -34,6 +35,7 @@ export default function App() {
       >
         <Box>
           <Header />
+          <Sidebar />
         </Box>
         <CssBaseline />
       </AppContext.Provider>

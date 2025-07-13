@@ -1,4 +1,11 @@
-import { Box, Button, IconButton, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  Pagination,
+  TextField,
+  Typography,
+} from "@mui/material";
 
 import { Search as SearchIcon } from "@mui/icons-material";
 
@@ -17,7 +24,6 @@ export default function Home() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          mt: 5,
         }}
       >
         <Typography variant="h5" component="div">
@@ -29,13 +35,24 @@ export default function Home() {
       <Box sx={{ display: "flex", mt: 3, mb: 3 }}>
         <TextField variant="outlined" label="Search" size="small" fullWidth />
         <IconButton>
-          <SearchIcon />
+          <SearchIcon fontSize="inherit" />
         </IconButton>
       </Box>
 
       {bookData.map((book) => {
         return <Book book={book} />;
       })}
+
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "flex-end",
+          mt: 3,
+        }}
+      >
+        <Pagination count={10} />
+      </Box>
     </>
   );
 }

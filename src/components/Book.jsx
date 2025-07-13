@@ -4,7 +4,7 @@ import { AddShoppingCart as AddIcon } from "@mui/icons-material";
 
 export default function Book({ book }) {
   return (
-    <Card sx={{ m: 1 }}>
+    <Card sx={{ mt: 1 }}>
       <CardContent
         sx={{
           display: "flex",

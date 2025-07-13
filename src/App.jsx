@@ -1,26 +1,41 @@
-import { createContext } from "react";
+import { createContext, useContext, useState } from "react";
 
-import { ThemeProvider, createTheme } from "@mui/material";
-import { deepPurple, grey } from "@mui/material/colors";
+import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
+import { Box } from "@mui/material";
+import { grey } from "@mui/material/colors";
+
+import Header from "./components/Header";
 
 export const AppContext = createContext();
+
+export function useApp() {
+  return useContext(AppContext);
+}
 
 const theme = createTheme({
   palette: {
     mode: "light",
-    primary: deepPurple,
+    primary: {
+      main: "#A51C30",
+    },
     text: { fade: grey[500] },
   },
 });
 
 export default function App() {
+  const [showCart, setShowCart] = useState(true);
   return (
     <ThemeProvider theme={theme}>
-      <AppContext.Provider value={{}}>
-        <div>
-          <h1>Book Rental System</h1>
-          <p>This is app...</p>
-        </div>
+      <AppContext.Provider
+        value={{
+          showCart,
+          setShowCart,
+        }}
+      >
+        <Box>
+          <Header />
+        </Box>
+        <CssBaseline />
       </AppContext.Provider>
     </ThemeProvider>
   );

@@ -7,15 +7,13 @@ import {
   Box,
 } from "@mui/material";
 
-import logo from "../assets/logo.png";
-
 export default function Sidebar() {
   return (
     <Drawer variant="permanent" anchor="left">
       <Box sx={{ width: 240, position: "relative" }}>
         <Box
           component="img"
-          src={logo}
+          src="/logo.png"
           sx={{
             m: 3,
             height: 48,

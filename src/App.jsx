@@ -7,6 +7,7 @@ import { grey } from "@mui/material/colors";
 
 import Template from "./Template";
 import Home from "./pages/Home";
+import Students from "./pages/Students";
 
 export const AppContext = createContext();
 
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/students",
+        element: <Students />,
       },
     ],
   },

@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 import {
   Drawer,
   List,
@@ -8,6 +10,7 @@ import {
 } from "@mui/material";
 
 export default function Sidebar() {
+  const navigate = useNavigate();
   return (
     <Drawer variant="permanent" anchor="left" sx={{ flexShrink: 0 }}>
       <Box sx={{ width: 240, position: "relative" }}>
@@ -23,22 +26,22 @@ export default function Sidebar() {
       </Box>
       <List>
         <ListItem>
-          <ListItemButton>
+          <ListItemButton onClick={() => navigate("/")}>
             <ListItemText>Home</ListItemText>
           </ListItemButton>
         </ListItem>
         <ListItem>
-          <ListItemButton>
+          <ListItemButton onClick={() => navigate("/")}>
             <ListItemText>Returns</ListItemText>
           </ListItemButton>
         </ListItem>
         <ListItem>
-          <ListItemButton>
+          <ListItemButton onClick={() => navigate("/students")}>
             <ListItemText>Students</ListItemText>
           </ListItemButton>
         </ListItem>
         <ListItem>
-          <ListItemButton>
+          <ListItemButton onClick={() => navigate("/")}>
             <ListItemText>Report</ListItemText>
           </ListItemButton>
         </ListItem>

@@ -2,7 +2,7 @@ import { Card, CardContent, IconButton, Typography, Box } from "@mui/material";
 
 import { AddShoppingCart as AddIcon } from "@mui/icons-material";
 
-export default function Book({ book }) {
+export default function BookCard({ book }) {
   return (
     <Card sx={{ mt: 1 }}>
       <CardContent

@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import {
   Box,
   Button,
@@ -9,9 +11,11 @@ import {
 
 import { Search as SearchIcon } from "@mui/icons-material";
 
-import Book from "../components/Book";
+import BookCard from "../components/BookCard";
+import BookForm from "../components/BookForm";
 
 export default function Home() {
+  const [open, setOpen] = useState(false);
   const bookData = [
     { id: 1, title: "Harry Potter 1", stock: 2 },
     { id: 2, title: "Harry Potter 2", stock: 1 },
@@ -29,8 +33,12 @@ export default function Home() {
         <Typography variant="h5" component="div">
           Home
         </Typography>
-        <Button variant="contained">Add New Book</Button>
+        <Button variant="contained" onClick={() => setOpen(true)}>
+          Add New Book
+        </Button>
       </Box>
+
+      <BookForm open={open} setOpen={setOpen} />
 
       <Box sx={{ display: "flex", mt: 3, mb: 3 }}>
         <TextField variant="outlined" label="Search" size="small" fullWidth />
@@ -40,7 +48,7 @@ export default function Home() {
       </Box>
 
       {bookData.map((book) => {
-        return <Book book={book} />;
+        return <BookCard book={book} />;
       })}
 
       <Box

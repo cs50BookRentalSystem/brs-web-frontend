@@ -33,6 +33,9 @@ const theme = createTheme({
     primary: {
       main: "#A51C30",
     },
+    secondary: {
+      main: "#8C8179",
+    },
     text: { fade: grey[500] },
   },
 });

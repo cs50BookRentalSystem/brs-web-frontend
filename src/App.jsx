@@ -9,6 +9,7 @@ import Template from "./Template";
 import Home from "./pages/Home";
 import Returns from "./pages/Returns";
 import Students from "./pages/Students";
+import Cart from "./pages/Cart";
 
 export const AppContext = createContext();
 
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
       {
         path: "/students",
         element: <Students />,
+      },
+      {
+        path: "/cart",
+        element: <Cart />,
       },
     ],
   },

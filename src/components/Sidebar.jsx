@@ -31,7 +31,7 @@ export default function Sidebar() {
           </ListItemButton>
         </ListItem>
         <ListItem>
-          <ListItemButton onClick={() => navigate("/")}>
+          <ListItemButton onClick={() => navigate("/returns")}>
             <ListItemText>Returns</ListItemText>
           </ListItemButton>
         </ListItem>

@@ -5,6 +5,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { grey } from "@mui/material/colors";
 
+import AuthTemplate from "./AuthTemplate";
+import Login from "./pages/Login";
+
 import Template from "./Template";
 import Home from "./pages/Home";
 import Returns from "./pages/Returns";
@@ -18,6 +21,16 @@ export function useApp() {
 }
 
 const router = createBrowserRouter([
+  {
+    path: "/login",
+    element: <AuthTemplate />,
+    children: [
+      {
+        path: "/login",
+        element: <Login />,
+      },
+    ],
+  },
   {
     path: "/",
     element: <Template />,

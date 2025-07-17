@@ -16,13 +16,14 @@ export default function Login() {
   return (
     <Box
       sx={{
-        mt: 10,
+        height: "100vh",
         display: "flex",
-        alignItems: "center",
+        alignItems: "flex-start",
         justifyContent: "center",
+        backgroundColor: "#f5f5f5",
       }}
     >
-      <Paper sx={{ p: 5, width: 500 }}>
+      <Paper sx={{ mt: 9, p: 5, width: 500 }}>
         <Box
           sx={{
             display: "flex",

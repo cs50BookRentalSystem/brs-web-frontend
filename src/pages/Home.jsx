@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 import {
   Box,
@@ -7,20 +8,49 @@ import {
   Pagination,
   TextField,
   Typography,
+  Alert,
 } from "@mui/material";
 
 import { Search as SearchIcon } from "@mui/icons-material";
 
 import BookCard from "../components/BookCard";
 import BookForm from "../components/BookForm";
+import Sad from "../components/Sad";
+
+const api = "http://localhost:8080";
+const LIMIT = 10;
 
 export default function Home() {
-  const [open, setOpen] = useState(false);
-  const bookData = [
-    { id: 1, title: "Harry Potter 1", stock: 2 },
-    { id: 2, title: "Harry Potter 2", stock: 1 },
-    { id: 3, title: "Harry Potter 3", stock: 1 },
-  ];
+  const [openForm, setOpenForm] = useState(false);
+  const [searchKey, setSearchKey] = useState("");
+  const [page, setPage] = useState(1);
+  const offset = (page - 1) * LIMIT;
+  const { isLoading, isError, error, data, refetch } = useQuery({
+    queryKey: ["books", page],
+    queryFn: async () => {
+      const queryParam = searchKey.trim() ? `query=${searchKey}` : "";
+      const res = await fetch(
+        `${api}/books?${queryParam}&limit=${LIMIT}&offset=${offset}`,
+        {
+          credentials: "include",
+        }
+      );
+      return res.json();
+    },
+  });
+
+  if (isError) {
+    return (
+      <Box>
+        <Alert severity="warning">{error.message}</Alert>
+      </Box>
+    );
+  }
+
+  if (isLoading) {
+    return <Box sx={{ textAlign: "center" }}>Loading...</Box>;
+  }
+
   return (
     <>
       <Box
@@ -33,34 +63,63 @@ export default function Home() {
         <Typography variant="h5" component="div">
           Home
         </Typography>
-        <Button variant="contained" onClick={() => setOpen(true)}>
+        <Button variant="contained" onClick={() => setOpenForm(true)}>
           Add New Book
         </Button>
       </Box>
 
-      <BookForm open={open} setOpen={setOpen} />
+      <BookForm open={openForm} setOpen={setOpenForm} />
 
-      <Box sx={{ display: "flex", mt: 3, mb: 3 }}>
-        <TextField variant="outlined" label="Search" size="small" fullWidth />
-        <IconButton>
+      <Box
+        component="form"
+        onSubmit={(e) => {
+          e.preventDefault();
+          setPage(1);
+          refetch();
+        }}
+        sx={{ display: "flex", mt: 3, mb: 3 }}
+      >
+        <TextField
+          value={searchKey}
+          onChange={(e) => {
+            setSearchKey(e.target.value);
+          }}
+          variant="outlined"
+          label="Search by Book Name"
+          size="small"
+          fullWidth
+        />
+        <IconButton type="submit">
           <SearchIcon fontSize="inherit" />
         </IconButton>
       </Box>
 
-      {bookData.map((book) => {
-        return <BookCard book={book} />;
-      })}
+      {data.results.length == 0 ? (
+        <>
+          <Sad msg={"No books found..."} />
+        </>
+      ) : (
+        <>
+          {data.results.map((book) => {
+            return <BookCard key={book.id} book={book} />;
+          })}
 
-      <Box
-        sx={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "flex-end",
-          mt: 3,
-        }}
-      >
-        <Pagination count={10} />
-      </Box>
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "flex-end",
+              mt: 3,
+            }}
+          >
+            <Pagination
+              count={Math.ceil(data.pagination.total / 10)}
+              page={page}
+              onChange={(e, newPage) => setPage(newPage)}
+            />
+          </Box>
+        </>
+      )}
     </>
   );
 }

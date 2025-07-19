@@ -17,7 +17,7 @@ export default function BookCard({ book }) {
           <Box sx={{ flexGrow: 1 }}>
             <Typography fontSize="inherit">{book.title}</Typography>
           </Box>
-          <Typography fontSize="inherit">{book.stock} books left</Typography>
+          <Typography fontSize="inherit">{book.count} books left</Typography>
         </Box>
         <IconButton>
           <AddIcon fontSize="inherit" />

@@ -11,7 +11,7 @@ export default function Template() {
       <Header />
       <Box sx={{ display: "flex" }}>
         <Sidebar />
-        <Container sx={{ ml: 30, pt: 5 }}>
+        <Container sx={{ ml: 30, pt: 5, pb: 5 }}>
           <Outlet />
         </Container>
       </Box>

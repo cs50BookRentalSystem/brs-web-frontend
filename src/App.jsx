@@ -2,6 +2,8 @@ import { createContext, useContext, useState } from "react";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { grey } from "@mui/material/colors";
 
@@ -16,6 +18,8 @@ import Cart from "./pages/Cart";
 import Report from "./pages/Report";
 
 export const AppContext = createContext();
+
+export const queryClient = new QueryClient();
 
 export function useApp() {
   return useContext(AppContext);
@@ -83,7 +87,9 @@ export default function App() {
           setShowCart,
         }}
       >
-        <RouterProvider router={router} />
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>
         <CssBaseline />
       </AppContext.Provider>
     </ThemeProvider>

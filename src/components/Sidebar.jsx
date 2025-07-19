@@ -41,7 +41,7 @@ export default function Sidebar() {
           </ListItemButton>
         </ListItem>
         <ListItem>
-          <ListItemButton onClick={() => navigate("/")}>
+          <ListItemButton onClick={() => navigate("/report")}>
             <ListItemText>Report</ListItemText>
           </ListItemButton>
         </ListItem>

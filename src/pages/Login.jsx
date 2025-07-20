@@ -59,19 +59,13 @@ export default function Login() {
               headers: {
                 "Content-Type": "application/json",
               },
+              credentials: "include",
               body: JSON.stringify({
                 user: username,
                 pass: password,
               }),
             });
-            console.log(res);
-            console.log(
-              JSON.stringify({
-                user: username,
-                pass: password,
-              })
-            );
-            res.ok ? navigate("/report") : alert("Login failed...");
+            res.ok ? navigate("/") : alert("Login failed...");
           }}
           sx={{
             display: "flex",

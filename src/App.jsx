@@ -1,6 +1,10 @@
 import { createContext, useContext, useState } from "react";
 
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  redirect,
+} from "react-router-dom";
 
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
@@ -25,6 +29,14 @@ export function useApp() {
   return useContext(AppContext);
 }
 
+const requireAuth = async () => {
+  const api = "http://localhost:8080";
+  const res = await fetch(`${api}/students?limit=20&offset=0`, {
+    credentials: "include",
+  });
+  if (!res.ok) throw redirect("/login");
+};
+
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -39,6 +51,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Template />,
+    loader: requireAuth,
     children: [
       {
         path: "/",
@@ -79,6 +92,7 @@ const theme = createTheme({
 
 export default function App() {
   const [showCart, setShowCart] = useState(true);
+
   return (
     <ThemeProvider theme={theme}>
       <AppContext.Provider

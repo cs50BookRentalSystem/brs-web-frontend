@@ -18,6 +18,8 @@ import { useApp } from "../App";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
+const api = "http://localhost:8080";
+
 export default function Header() {
   const { showCart } = useApp();
   const navigate = useNavigate();
@@ -54,8 +56,12 @@ export default function Header() {
             <MenuItem
               color="inherit"
               sx={{ fontSize: "0.9em" }}
-              onClick={() => {
-                navigate("/login");
+              onClick={async (e) => {
+                const res = await fetch(`${api}/logout`, {
+                  method: "POST",
+                  credentials: "include",
+                });
+                res.ok ? navigate("/login") : alert("Logout failed...");
               }}
             >
               <Box display="flex" alignItems="center" gap={1}>

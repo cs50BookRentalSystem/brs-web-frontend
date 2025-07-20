@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 
 import {
   Box,
@@ -13,6 +13,7 @@ import {
 
 import { Search as SearchIcon } from "@mui/icons-material";
 
+import { queryClient } from "../App";
 import BookCard from "../components/BookCard";
 import BookForm from "../components/BookForm";
 import Sad from "../components/Sad";
@@ -25,6 +26,7 @@ export default function Home() {
   const [searchKey, setSearchKey] = useState("");
   const [page, setPage] = useState(1);
   const offset = (page - 1) * LIMIT;
+
   const { isLoading, isError, error, data, refetch } = useQuery({
     queryKey: ["books", page],
     queryFn: async () => {
@@ -36,6 +38,23 @@ export default function Home() {
         }
       );
       return res.json();
+    },
+  });
+
+  const addFn = useMutation({
+    mutationFn: async (data) => {
+      const res = await fetch(`${api}/books`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error("Failed to create book...");
+      return await res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["books"] });
+      setOpenForm(false);
     },
   });
 
@@ -68,7 +87,7 @@ export default function Home() {
         </Button>
       </Box>
 
-      <BookForm open={openForm} setOpen={setOpenForm} />
+      <BookForm open={openForm} setOpen={setOpenForm} addFn={addFn.mutate} />
 
       <Box
         component="form"

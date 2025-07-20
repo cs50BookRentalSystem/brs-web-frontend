@@ -8,27 +8,39 @@ import {
   DialogActions,
 } from "@mui/material";
 
-export default function BookForm({ open, setOpen }) {
+import { useRef } from "react";
+
+export default function BookForm({ open, setOpen, addFn }) {
+  const titleRef = useRef();
+  const descRef = useRef();
+  const numRef = useRef();
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>
       <DialogTitle>ADD NEW BOOK</DialogTitle>
-      <DialogContent>
-        <Box
-          component="form"
-          onSubmit={(e) => {
-            e.preventDefault();
-          }}
-        >
-          <TextField type="text" placeholder="Title" sx={{ mt: 1 }} fullWidth />
+      <Box
+        component="form"
+        onSubmit={(e) => {
+          e.preventDefault();
+          const newBook = {
+            title: titleRef.current.value,
+            description: descRef.current.value,
+            count: parseInt(numRef.current.value),
+          };
+          addFn(newBook);
+        }}
+      >
+        <DialogContent>
           <TextField
             type="text"
-            placeholder="Author"
+            placeholder="Title"
+            inputRef={titleRef}
             sx={{ mt: 1 }}
             fullWidth
           />
           <TextField
             type="text"
             placeholder="Description"
+            inputRef={descRef}
             sx={{ mt: 1 }}
             multiline
             fullWidth
@@ -36,25 +48,26 @@ export default function BookForm({ open, setOpen }) {
           <TextField
             type="number"
             placeholder="Number of Books"
+            inputRef={numRef}
             sx={{ mt: 1 }}
             fullWidth
           />
-        </Box>
-      </DialogContent>
-      <DialogActions sx={{ mr: 2, mb: 2 }}>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => {
-            setOpen(false);
-          }}
-        >
-          Cancel
-        </Button>
-        <Button variant="contained" onClick={() => {}}>
-          Submit
-        </Button>
-      </DialogActions>
+        </DialogContent>
+        <DialogActions sx={{ mr: 2, mb: 2 }}>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => {
+              setOpen(false);
+            }}
+          >
+            Cancel
+          </Button>
+          <Button type="submit" variant="contained">
+            Submit
+          </Button>
+        </DialogActions>
+      </Box>
     </Dialog>
   );
 }

@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { useApp } from "../App";
+import { useState } from "react";
+
 import {
   Paper,
   Box,
@@ -9,9 +10,12 @@ import {
   Button,
 } from "@mui/material";
 
+const api = "http://localhost:8080";
+
 export default function Login() {
   const navigate = useNavigate();
-  //   const { setAuth } = useApp();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   return (
     <Box
@@ -48,9 +52,26 @@ export default function Login() {
 
         <Box
           component="form"
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
-            navigate("/");
+            const res = await fetch(`${api}/login`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                user: username,
+                pass: password,
+              }),
+            });
+            console.log(res);
+            console.log(
+              JSON.stringify({
+                user: username,
+                pass: password,
+              })
+            );
+            res.ok ? navigate("/report") : alert("Login failed...");
           }}
           sx={{
             display: "flex",
@@ -59,8 +80,21 @@ export default function Login() {
             gap: 1,
           }}
         >
-          <TextField placeholder="Username" fullWidth />
-          <TextField type="password" placeholder="Password" fullWidth />
+          <TextField
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+            fullWidth
+          />
+          <TextField
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            fullWidth
+          />
           <Button type="submit" variant="contained" fullWidth>
             Login
           </Button>

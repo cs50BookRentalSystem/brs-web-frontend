@@ -1,15 +1,40 @@
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 import { Box, Typography, Button } from "@mui/material";
 import StudentForm from "../components/StudentForm";
 import StudentTable from "../components/StudentTable";
 
+const api = import.meta.env.VITE_API;
+const LIMIT = 10;
+
 export default function Students() {
-  const [open, setOpen] = useState();
-  const rows = [
-    { id: 1, name: "Elon Musk", card_id: "HVD001" },
-    { id: 2, name: "Mark Zukerberg", card_id: "HVD002" },
-  ];
+  const [openForm, setOpenForm] = useState();
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 5,
+  });
+
+  const { isLoading, isError, error, data } = useQuery({
+    queryKey: ["students"],
+    queryFn: async () => {
+      const res = await fetch(`${api}/students`, { credentials: "include" });
+      return res.json();
+    },
+  });
+
+  if (isError) {
+    return (
+      <Box>
+        <Alert severity="warning">{error.message}</Alert>
+      </Box>
+    );
+  }
+
+  if (isLoading) {
+    return <Box sx={{ textAlign: "center" }}>Loading...</Box>;
+  }
+
   return (
     <>
       <Box
@@ -22,14 +47,18 @@ export default function Students() {
         <Typography variant="h5" component="div">
           Students
         </Typography>
-        <Button variant="contained" onClick={() => setOpen(true)}>
+        <Button variant="contained" onClick={() => setOpenForm(true)}>
           Add New Student
         </Button>
       </Box>
 
-      <StudentForm open={open} setOpen={setOpen} />
+      <StudentForm open={openForm} setOpen={setOpenForm} />
 
-      <StudentTable rows={rows} />
+      <StudentTable
+        rows={data.results}
+        paginationModel={paginationModel}
+        setPaginationModel={setPaginationModel}
+      />
     </>
   );
 }

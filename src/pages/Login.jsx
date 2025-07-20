@@ -10,7 +10,7 @@ import {
   Button,
 } from "@mui/material";
 
-const api = "http://localhost:8080";
+const api = import.meta.env.VITE_API;
 
 export default function Login() {
   const navigate = useNavigate();

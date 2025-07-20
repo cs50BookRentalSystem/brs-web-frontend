@@ -17,7 +17,7 @@ import BookCard from "../components/BookCard";
 import BookForm from "../components/BookForm";
 import Sad from "../components/Sad";
 
-const api = "http://localhost:8080";
+const api = import.meta.env.VITE_API;
 const LIMIT = 10;
 
 export default function Home() {

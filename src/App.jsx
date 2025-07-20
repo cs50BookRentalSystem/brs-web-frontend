@@ -30,8 +30,8 @@ export function useApp() {
 }
 
 const requireAuth = async () => {
-  const api = "http://localhost:8080";
-  const res = await fetch(`${api}/students?limit=20&offset=0`, {
+  const api = import.meta.env.VITE_API;
+  const res = await fetch(`${api}/librarian`, {
     credentials: "include",
   });
   if (!res.ok) throw redirect("/login");

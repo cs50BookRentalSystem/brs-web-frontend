@@ -1,13 +1,26 @@
-import { Box, Typography, Button, TextField, IconButton } from "@mui/material";
+import { Box, Typography, TextField, IconButton, Alert } from "@mui/material";
 import { Search as SearchIcon } from "@mui/icons-material";
+
 import ReturnCard from "../components/ReturnCard";
+import Sad from "../components/Sad";
+
+import { useRef } from "react";
+import { useMutation } from "@tanstack/react-query";
+
+const api = import.meta.env.VITE_API;
 
 export default function Returns() {
-  const studentData = {
-    name: "Elon Musk",
-    student_id: "HVD001",
-    books: ["Harry Potter 1", "Lord of the Ring", "Seven Kingdoms"],
-  };
+  const cardRef = useRef();
+  const { mutate, isPending, isError, error, isSuccess, data } = useMutation({
+    mutationFn: async (cardId) => {
+      const res = await fetch(`${api}/returns?student_card_id=${cardId}`, {
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error("Failed to fetch data...");
+      return res.json();
+    },
+  });
+
   return (
     <>
       <Box
@@ -22,19 +35,43 @@ export default function Returns() {
         </Typography>
       </Box>
 
-      <Box sx={{ display: "flex", mt: 3, mb: 3 }}>
+      <Box
+        component={"form"}
+        onSubmit={(e) => {
+          e.preventDefault();
+          mutate(cardRef.current.value.trim());
+        }}
+        sx={{ display: "flex", mt: 3, mb: 3 }}
+      >
         <TextField
           variant="outlined"
           label="Search by Student Card ID"
+          inputRef={cardRef}
           size="small"
+          required
           fullWidth
         />
-        <IconButton>
+        <IconButton type="submit">
           <SearchIcon fontSize="inherit" />
         </IconButton>
       </Box>
 
-      <ReturnCard student={studentData} />
+      {isError && (
+        <Box>
+          <Alert severity="warning">{error.message}</Alert>
+        </Box>
+      )}
+
+      {isPending && <Box sx={{ textAlign: "center" }}>Loading...</Box>}
+
+      {isSuccess &&
+        (data.results.length === 0 ? (
+          <>
+            <Sad msg={"No data found..."} />
+          </>
+        ) : (
+          <ReturnCard student={data.results[0]} />
+        ))}
     </>
   );
 }

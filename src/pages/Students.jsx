@@ -16,6 +16,7 @@ export default function Students() {
     pageSize: 5,
   });
 
+  // get the list of students
   const { isLoading, isError, error, data } = useQuery({
     queryKey: ["students"],
     queryFn: async () => {
@@ -24,6 +25,7 @@ export default function Students() {
     },
   });
 
+  // add new student
   const addFn = useMutation({
     mutationFn: async (data) => {
       const res = await fetch(`${api}/students`, {
@@ -40,6 +42,9 @@ export default function Students() {
       setOpenForm(false);
     },
   });
+
+  // todo: api integration for deleting student
+  const deleteFn = () => {};
 
   if (isError) {
     return (

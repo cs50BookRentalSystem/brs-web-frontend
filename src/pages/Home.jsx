@@ -101,7 +101,7 @@ export default function Home() {
         <TextField
           value={searchKey}
           onChange={(e) => {
-            setSearchKey(e.target.value);
+            setSearchKey(e.target.value.trim());
           }}
           variant="outlined"
           label="Search by Book Name"

@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { Box, Typography, Button } from "@mui/material";
 import StudentForm from "../components/StudentForm";
 import StudentTable from "../components/StudentTable";
+import { queryClient } from "../App";
 
 const api = import.meta.env.VITE_API;
 const LIMIT = 10;
@@ -20,6 +21,23 @@ export default function Students() {
     queryFn: async () => {
       const res = await fetch(`${api}/students`, { credentials: "include" });
       return res.json();
+    },
+  });
+
+  const addFn = useMutation({
+    mutationFn: async (data) => {
+      const res = await fetch(`${api}/students`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error("Failed to create new student...");
+      return await res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["students"] });
+      setOpenForm(false);
     },
   });
 
@@ -52,7 +70,7 @@ export default function Students() {
         </Button>
       </Box>
 
-      <StudentForm open={openForm} setOpen={setOpenForm} />
+      <StudentForm open={openForm} setOpen={setOpenForm} addFn={addFn.mutate} />
 
       <StudentTable
         rows={data.results}

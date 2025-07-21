@@ -10,7 +10,7 @@ export default function StudentTable({
   const columns = [
     { field: "first_name", headerName: "First Name", flex: 1 },
     { field: "last_name", headerName: "Last Name", flex: 1 },
-    { field: "card_id", headerName: "Student ID", flex: 1 },
+    { field: "card_id", headerName: "Student Card ID", flex: 1 },
     {
       field: "action",
       headerName: "",

@@ -12,40 +12,62 @@ import {
   FormControl,
 } from "@mui/material";
 
-export default function StudentForm({ open, setOpen }) {
+import { useRef } from "react";
+
+export default function StudentForm({ open, setOpen, addFn }) {
+  const cardRef = useRef();
+  const fnameRef = useRef();
+  const lnameRef = useRef();
+  const majorRef = useRef();
+  const phoneRef = useRef();
+
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>
       <DialogTitle>ADD NEW STUDENT</DialogTitle>
-      <DialogContent>
-        <Box
-          component="form"
-          onSubmit={(e) => {
-            e.preventDefault();
-          }}
-        >
+      <Box
+        component="form"
+        onSubmit={(e) => {
+          e.preventDefault();
+          const newStudent = {
+            card_id: cardRef.current.value,
+            first_name: fnameRef.current.value,
+            last_name: lnameRef.current.value,
+            major: majorRef.current.value,
+            phone: phoneRef.current.value,
+          };
+          addFn(newStudent);
+        }}
+      >
+        <DialogContent>
           <TextField
             type="text"
-            placeholder="Student ID"
+            placeholder="Student Card ID"
+            inputRef={cardRef}
             sx={{ mt: 1 }}
+            required
             fullWidth
           />
           <TextField
             type="text"
             placeholder="First Name"
+            inputRef={fnameRef}
             sx={{ mt: 1 }}
             multiline
+            required
             fullWidth
           />
           <TextField
             type="text"
             placeholder="Last Name"
+            inputRef={lnameRef}
             sx={{ mt: 1 }}
             multiline
+            required
             fullWidth
           />
-          <FormControl sx={{ mt: 1 }} fullWidth>
+          <FormControl sx={{ mt: 1 }} required fullWidth>
             <InputLabel id="major-select">Major</InputLabel>
-            <Select labelId="major-select" label="Major">
+            <Select labelId="major-select" label="Major" inputRef={majorRef}>
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
@@ -62,6 +84,7 @@ export default function StudentForm({ open, setOpen }) {
           <TextField
             type="text"
             placeholder="Phone Number"
+            inputRef={phoneRef}
             slotProps={{
               input: {
                 inputMode: "tel",
@@ -69,24 +92,25 @@ export default function StudentForm({ open, setOpen }) {
               },
             }}
             sx={{ mt: 1 }}
+            required
             fullWidth
           />
-        </Box>
-      </DialogContent>
-      <DialogActions sx={{ mr: 2, mb: 2 }}>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => {
-            setOpen(false);
-          }}
-        >
-          Cancel
-        </Button>
-        <Button variant="contained" onClick={() => {}}>
-          Submit
-        </Button>
-      </DialogActions>
+        </DialogContent>
+        <DialogActions sx={{ mr: 2, mb: 2 }}>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => {
+              setOpen(false);
+            }}
+          >
+            Cancel
+          </Button>
+          <Button type="submit" variant="contained">
+            Submit
+          </Button>
+        </DialogActions>
+      </Box>
     </Dialog>
   );
 }

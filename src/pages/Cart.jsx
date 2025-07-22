@@ -36,7 +36,7 @@ export default function Cart() {
           Complete Cart
         </Button>
       </Box>
-      <CartTable books={cartItems} />
+      <CartTable books={cartItems} removeFromCart={removeFromCart} />
       <CartStudentForm found={found} student={student} />
     </>
   );

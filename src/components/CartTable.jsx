@@ -12,7 +12,7 @@ import {
 
 import { Delete as DeleteIcon } from "@mui/icons-material";
 
-export default function CartTable({ books }) {
+export default function CartTable({ books, removeFromCart }) {
   return (
     <Box sx={{ mt: 3 }}>
       <TableContainer component={Paper}>
@@ -31,7 +31,10 @@ export default function CartTable({ books }) {
                   <TableCell sx={{ width: 60 }}>{idx + 1}</TableCell>
                   <TableCell>{book.title}</TableCell>
                   <TableCell sx={{ width: 100 }}>
-                    <IconButton color="error">
+                    <IconButton
+                      color="error"
+                      onClick={() => removeFromCart(book.id)}
+                    >
                       <DeleteIcon />
                     </IconButton>
                   </TableCell>

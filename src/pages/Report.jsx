@@ -8,9 +8,14 @@ import {
   TableCell,
   TableBody,
   TableRow,
+  Alert,
 } from "@mui/material";
 
 import ScoreCard from "../components/ScoreCard";
+
+import { useQuery } from "@tanstack/react-query";
+
+const api = import.meta.env.VITE_API;
 
 export default function Report() {
   const overdues = [
@@ -39,6 +44,30 @@ export default function Report() {
       count: 3,
     },
   ];
+
+  const { isLoading, isError, error, data } = useQuery({
+    queryKey: ["report"],
+    queryFn: async () => {
+      const res = await fetch(`${api}/reports`, {
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error("Failed to fetch data...");
+      return res.json();
+    },
+  });
+
+  if (isError) {
+    return (
+      <Box>
+        <Alert severity="warning">{error.message}</Alert>
+      </Box>
+    );
+  }
+
+  if (isLoading) {
+    return <Box sx={{ textAlign: "center" }}>Loading...</Box>;
+  }
+
   return (
     <>
       <Box
@@ -56,8 +85,8 @@ export default function Report() {
         </Button>
       </Box>
       <Box display={"flex"} gap="2" sx={{ mt: 3 }}>
-        <ScoreCard title={"# Book Rented"} value={13} />
-        <ScoreCard title={"# Student Rentees"} value={5} />
+        <ScoreCard title={"# Book Rented"} value={data.total_rents} />
+        <ScoreCard title={"# Student Rentees"} value={data.total_students} />
       </Box>
       <Box sx={{ mt: 3, border: 1, borderColor: "grey.400", p: 3 }}>
         <Typography variant="h7">Top 10 Overdues</Typography>
@@ -102,15 +131,16 @@ export default function Report() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {books.map((item, idx) => {
-                return (
-                  <TableRow key={idx}>
-                    <TableCell sx={{ width: 60 }}>{idx + 1}</TableCell>
-                    <TableCell>{item.name}</TableCell>
-                    <TableCell>{item.count}</TableCell>
-                  </TableRow>
-                );
-              })}
+              {data.top_books &&
+                data.top_books.map((item, idx) => {
+                  return (
+                    <TableRow key={idx}>
+                      <TableCell sx={{ width: 60 }}>{idx + 1}</TableCell>
+                      <TableCell>{item.name}</TableCell>
+                      <TableCell>{item.count}</TableCell>
+                    </TableRow>
+                  );
+                })}
             </TableBody>
           </Table>
         </TableContainer>

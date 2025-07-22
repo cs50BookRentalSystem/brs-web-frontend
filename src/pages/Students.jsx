@@ -21,6 +21,7 @@ export default function Students() {
     queryKey: ["students"],
     queryFn: async () => {
       const res = await fetch(`${api}/students`, { credentials: "include" });
+      if (!res.ok) throw new Error("Failed to create new student...");
       return res.json();
     },
   });

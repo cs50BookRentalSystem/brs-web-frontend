@@ -1,8 +1,8 @@
 import { Card, CardContent, IconButton, Typography, Box } from "@mui/material";
 
-import { AddShoppingCart as AddIcon } from "@mui/icons-material";
+import { AddShoppingCart as AddToCartIcon } from "@mui/icons-material";
 
-export default function BookCard({ book }) {
+export default function BookCard({ book, addToCart }) {
   return (
     <Card sx={{ mt: 1 }}>
       <CardContent
@@ -19,8 +19,8 @@ export default function BookCard({ book }) {
           </Box>
           <Typography fontSize="inherit">{book.count} books left</Typography>
         </Box>
-        <IconButton>
-          <AddIcon fontSize="inherit" />
+        <IconButton onClick={() => addToCart(book)}>
+          <AddToCartIcon fontSize="inherit" />
         </IconButton>
       </CardContent>
     </Card>

@@ -13,7 +13,7 @@ import {
 
 import { Search as SearchIcon } from "@mui/icons-material";
 
-import { queryClient } from "../App";
+import { queryClient, useApp } from "../App";
 import BookCard from "../components/BookCard";
 import BookForm from "../components/BookForm";
 import Sad from "../components/Sad";
@@ -22,6 +22,7 @@ const api = import.meta.env.VITE_API;
 const LIMIT = 10;
 
 export default function Home() {
+  const { setCartItems } = useApp();
   const [openForm, setOpenForm] = useState(false);
   const [searchKey, setSearchKey] = useState("");
   const [page, setPage] = useState(1);
@@ -57,6 +58,10 @@ export default function Home() {
       setOpenForm(false);
     },
   });
+
+  const addToCart = (item) => {
+    setCartItems((prev) => [...prev, item]);
+  };
 
   if (isError) {
     return (
@@ -120,7 +125,7 @@ export default function Home() {
       ) : (
         <>
           {data.results.map((book) => {
-            return <BookCard key={book.id} book={book} />;
+            return <BookCard key={book.id} book={book} addToCart={addToCart} />;
           })}
 
           <Box

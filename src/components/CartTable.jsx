@@ -29,7 +29,7 @@ export default function CartTable({ books }) {
               return (
                 <TableRow>
                   <TableCell sx={{ width: 60 }}>{idx + 1}</TableCell>
-                  <TableCell>{book}</TableCell>
+                  <TableCell>{book.title}</TableCell>
                   <TableCell sx={{ width: 100 }}>
                     <IconButton color="error">
                       <DeleteIcon />

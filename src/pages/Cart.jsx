@@ -1,9 +1,12 @@
 import { Box, Typography, Button } from "@mui/material";
+
 import CartTable from "../components/CartTable";
 import CartStudentForm from "../components/CartStudentForm";
 
+import { useApp } from "../App";
+
 export default function Cart() {
-  const books = ["Harry Potter 1", "Lord of the Ring", "Seven Kingdoms"];
+  const { cartItems, setCartItems } = useApp();
   const { found, student } = {
     found: true,
     student: {
@@ -12,6 +15,11 @@ export default function Cart() {
       phone: "09123456789",
     },
   };
+
+  const removeFromCart = (id) => {
+    setCartItems((prev) => prev.filter((item) => item.id !== id));
+  };
+
   return (
     <>
       <Box
@@ -28,7 +36,7 @@ export default function Cart() {
           Complete Cart
         </Button>
       </Box>
-      <CartTable books={books} />
+      <CartTable books={cartItems} />
       <CartStudentForm found={found} student={student} />
     </>
   );

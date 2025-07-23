@@ -34,16 +34,6 @@ export default function Report() {
       days: 5,
     },
   ];
-  const books = [
-    {
-      name: "Harry Potter 1",
-      count: 5,
-    },
-    {
-      name: "Lord of the Ring",
-      count: 3,
-    },
-  ];
 
   const { isLoading, isError, error, data } = useQuery({
     queryKey: ["report"],
@@ -136,8 +126,8 @@ export default function Report() {
                   return (
                     <TableRow key={idx}>
                       <TableCell sx={{ width: 60 }}>{idx + 1}</TableCell>
-                      <TableCell>{item.name}</TableCell>
-                      <TableCell>{item.count}</TableCell>
+                      <TableCell>{item.book_title}</TableCell>
+                      <TableCell>{item.rented_count}</TableCell>
                     </TableRow>
                   );
                 })}

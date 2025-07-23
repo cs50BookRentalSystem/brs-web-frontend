@@ -91,12 +91,15 @@ const theme = createTheme({
 });
 
 export default function App() {
+  const [globalMsg, setGlobalMsg] = useState(null);
   const [cartItems, setCartItems] = useState([]);
 
   return (
     <ThemeProvider theme={theme}>
       <AppContext.Provider
         value={{
+          globalMsg,
+          setGlobalMsg,
           cartItems,
           setCartItems,
         }}

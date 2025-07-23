@@ -4,12 +4,13 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { Box, Typography, Button } from "@mui/material";
 import StudentForm from "../components/StudentForm";
 import StudentTable from "../components/StudentTable";
-import { queryClient } from "../App";
+import { queryClient, useApp } from "../App";
 
 const api = import.meta.env.VITE_API;
 const LIMIT = 10;
 
 export default function Students() {
+  const { setGlobalMsg } = useApp();
   const [openForm, setOpenForm] = useState();
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
@@ -41,6 +42,7 @@ export default function Students() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["students"] });
       setOpenForm(false);
+      setGlobalMsg("Student has been created...");
     },
   });
 

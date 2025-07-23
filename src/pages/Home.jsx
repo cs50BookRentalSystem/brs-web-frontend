@@ -22,7 +22,7 @@ const api = import.meta.env.VITE_API;
 const LIMIT = 10;
 
 export default function Home() {
-  const { cartItems, setCartItems } = useApp();
+  const { cartItems, setCartItems, setGlobalMsg } = useApp();
   const [openForm, setOpenForm] = useState(false);
   const [searchKey, setSearchKey] = useState("");
   const [page, setPage] = useState(1);
@@ -56,12 +56,13 @@ export default function Home() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["books"] });
       setOpenForm(false);
+      setGlobalMsg("Book has been created...");
     },
   });
 
   const addToCart = (item) => {
     if (cartItems.length >= 3) {
-      alert("You can borrow only up to 3 books...");
+      setGlobalMsg("You can borrow only up to 3 books...");
       return;
     }
     setCartItems((prev) => [...prev, item]);

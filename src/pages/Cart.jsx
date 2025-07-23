@@ -50,7 +50,7 @@ export default function Cart() {
         <Button
           type="submit"
           variant="contained"
-          disabled={!found}
+          disabled={!found || cartItems.length <= 0}
           onClick={() => {}}
         >
           Complete Cart

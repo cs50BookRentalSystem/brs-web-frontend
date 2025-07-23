@@ -11,14 +11,18 @@ import { useState } from "react";
 const api = import.meta.env.VITE_API;
 
 export default function Cart() {
-  const { cartItems, setCartItems } = useApp();
+  const { cartItems, setCartItems, setGlobalMsg } = useApp();
   const [found, setFound] = useState(false);
 
   const removeFromCart = (id) => {
     setCartItems((prev) => prev.filter((item) => item.id !== id));
   };
 
-  const { mutate, error, data } = useMutation({
+  const {
+    mutate: searchStudent,
+    data: studentData,
+    reset: resetStudent,
+  } = useMutation({
     mutationFn: async (cardId) => {
       const res = await fetch(`${api}/students/${cardId}`, {
         credentials: "include",
@@ -34,10 +38,37 @@ export default function Cart() {
     },
   });
 
+  const completeCart = useMutation({
+    mutationFn: async (data) => {
+      const res = await fetch(`${api}/rents`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error("Failed to fetch data...");
+      return res.json();
+    },
+    onSuccess: () => {
+      setGlobalMsg("Checkout completes successfully...");
+      setCartItems([]);
+      setFound(false);
+      resetStudent();
+    },
+  });
+
   return (
     <>
       <Box
         component="form"
+        onSubmit={(e) => {
+          e.preventDefault();
+          const completeCartData = {
+            book_ids: cartItems.map((item) => item.id),
+            student_id: studentData?.id,
+          };
+          completeCart.mutate(completeCartData);
+        }}
         sx={{
           display: "flex",
           alignItems: "center",
@@ -51,13 +82,16 @@ export default function Cart() {
           type="submit"
           variant="contained"
           disabled={!found || cartItems.length <= 0}
-          onClick={() => {}}
         >
           Complete Cart
         </Button>
       </Box>
       <CartTable books={cartItems} removeFromCart={removeFromCart} />
-      <CartStudentForm found={found} student={data} searchFn={mutate} />
+      <CartStudentForm
+        found={found}
+        student={studentData}
+        searchFn={searchStudent}
+      />
     </>
   );
 }

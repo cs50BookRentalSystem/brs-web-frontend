@@ -13,7 +13,7 @@ export default function CartStudentForm({ found, student, searchFn }) {
         component={"form"}
         onSubmit={(e) => {
           e.preventDefault();
-          const cardId = cardIdRef.current.value;
+          const cardId = cardIdRef.current.value.trim();
           searchFn(cardId);
         }}
         sx={{ display: "flex", mt: 1.5 }}

@@ -7,7 +7,6 @@ import StudentTable from "../components/StudentTable";
 import { queryClient, useApp } from "../App";
 
 const api = import.meta.env.VITE_API;
-const LIMIT = 10;
 
 export default function Students() {
   const { setGlobalMsg } = useApp();

@@ -4,6 +4,8 @@ import { Search as SearchIcon } from "@mui/icons-material";
 import ReturnCard from "../components/ReturnCard";
 import Sad from "../components/Sad";
 
+import { useApp } from "../App";
+
 import { useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
 
@@ -11,13 +13,41 @@ const api = import.meta.env.VITE_API;
 
 export default function Returns() {
   const cardRef = useRef();
-  const { mutate, isPending, isError, error, isSuccess, data } = useMutation({
+  const { setGlobalMsg } = useApp();
+
+  const {
+    mutate: searchCardId,
+    isPending,
+    isError,
+    error,
+    isSuccess,
+    data,
+    reset: resetRentInfo,
+  } = useMutation({
     mutationFn: async (cardId) => {
       const res = await fetch(`${api}/returns?student_card_id=${cardId}`, {
         credentials: "include",
       });
       if (!res.ok) throw new Error("Failed to fetch data...");
       return res.json();
+    },
+  });
+
+  const receiveFn = useMutation({
+    mutationFn: async (data) => {
+      const res = await fetch(`${api}/returns`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error("Failed to update data...");
+      return res.json();
+    },
+    onSuccess: () => {
+      setGlobalMsg("Books have been received...");
+      resetRentInfo();
+      cardRef.current.value = "";
     },
   });
 
@@ -39,7 +69,7 @@ export default function Returns() {
         component={"form"}
         onSubmit={(e) => {
           e.preventDefault();
-          mutate(cardRef.current.value.trim());
+          searchCardId(cardRef.current.value.trim());
         }}
         sx={{ display: "flex", mt: 3, mb: 3 }}
       >
@@ -70,7 +100,11 @@ export default function Returns() {
             <Sad msg={"No data found..."} />
           </>
         ) : (
-          <ReturnCard student={data.results} cardId={cardRef.current.value} />
+          <ReturnCard
+            student={data.results}
+            cardId={cardRef.current.value}
+            receiveFn={receiveFn.mutate}
+          />
         ))}
     </>
   );

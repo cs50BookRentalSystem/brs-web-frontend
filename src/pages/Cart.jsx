@@ -5,24 +5,39 @@ import CartStudentForm from "../components/CartStudentForm";
 
 import { useApp } from "../App";
 
+import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
+
+const api = import.meta.env.VITE_API;
+
 export default function Cart() {
   const { cartItems, setCartItems } = useApp();
-  const { found, student } = {
-    found: true,
-    student: {
-      name: "Elon Musk",
-      major: "Computer Science",
-      phone: "09123456789",
-    },
-  };
+  const [found, setFound] = useState(false);
 
   const removeFromCart = (id) => {
     setCartItems((prev) => prev.filter((item) => item.id !== id));
   };
 
+  const { mutate, error, data } = useMutation({
+    mutationFn: async (cardId) => {
+      const res = await fetch(`${api}/students/${cardId}`, {
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error("Failed to fetch data...", res.status);
+      return res.json();
+    },
+    onSuccess: () => {
+      setFound(true);
+    },
+    onError: (error) => {
+      setFound(false);
+    },
+  });
+
   return (
     <>
       <Box
+        component="form"
         sx={{
           display: "flex",
           alignItems: "center",
@@ -32,12 +47,17 @@ export default function Cart() {
         <Typography variant="h5" component="div">
           Cart
         </Typography>
-        <Button variant="contained" disabled={!found} onClick={() => {}}>
+        <Button
+          type="submit"
+          variant="contained"
+          disabled={!found}
+          onClick={() => {}}
+        >
           Complete Cart
         </Button>
       </Box>
       <CartTable books={cartItems} removeFromCart={removeFromCart} />
-      <CartStudentForm found={found} student={student} />
+      <CartStudentForm found={found} student={data} searchFn={mutate} />
     </>
   );
 }

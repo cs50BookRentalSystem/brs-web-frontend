@@ -70,7 +70,7 @@ export default function Returns() {
             <Sad msg={"No data found..."} />
           </>
         ) : (
-          <ReturnCard student={data.results[0]} />
+          <ReturnCard student={data.results} cardId={cardRef.current.value} />
         ))}
     </>
   );

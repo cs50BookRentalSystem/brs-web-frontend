@@ -3,9 +3,9 @@ import {
   IconButton,
   Toolbar,
   Box,
-  Typography,
   Menu,
   MenuItem,
+  Badge,
 } from "@mui/material";
 
 import {
@@ -21,7 +21,7 @@ import { useState } from "react";
 const api = "http://localhost:8080";
 
 export default function Header() {
-  const { showCart } = useApp();
+  const { cartItems, showCart } = useApp();
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -32,7 +32,9 @@ export default function Header() {
         <Box>
           {showCart && (
             <IconButton color="inherit" onClick={() => navigate("/cart")}>
-              <CartIcon />
+              <Badge badgeContent={cartItems.length} color="secondary">
+                <CartIcon />
+              </Badge>
             </IconButton>
           )}
           <IconButton

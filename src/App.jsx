@@ -91,15 +91,12 @@ const theme = createTheme({
 });
 
 export default function App() {
-  const [showCart, setShowCart] = useState(true);
   const [cartItems, setCartItems] = useState([]);
 
   return (
     <ThemeProvider theme={theme}>
       <AppContext.Provider
         value={{
-          showCart,
-          setShowCart,
           cartItems,
           setCartItems,
         }}

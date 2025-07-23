@@ -21,7 +21,7 @@ import { useState } from "react";
 const api = "http://localhost:8080";
 
 export default function Header() {
-  const { cartItems, showCart } = useApp();
+  const { cartItems } = useApp();
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -30,13 +30,12 @@ export default function Header() {
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
         <Box />
         <Box>
-          {showCart && (
-            <IconButton color="inherit" onClick={() => navigate("/cart")}>
-              <Badge badgeContent={cartItems.length} color="secondary">
-                <CartIcon />
-              </Badge>
-            </IconButton>
-          )}
+          <IconButton color="inherit" onClick={() => navigate("/cart")}>
+            <Badge badgeContent={cartItems.length} color="secondary">
+              <CartIcon />
+            </Badge>
+          </IconButton>
+
           <IconButton
             color="inherit"
             edge="end"

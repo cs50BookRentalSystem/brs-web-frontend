@@ -7,11 +7,12 @@ import ConfirmDialog from "../components/ConfirmDialog";
 import { useApp } from "../App";
 
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 const api = import.meta.env.VITE_API;
 
 export default function Cart() {
+  const cardIdRef = useRef();
   const { cartItems, setCartItems, setGlobalMsg } = useApp();
   const [foundStudent, setFoundStudent] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
@@ -57,6 +58,7 @@ export default function Cart() {
       setCartItems([]);
       setFoundStudent(false);
       resetStudent();
+      cardIdRef.current.value = "";
     },
   });
 
@@ -103,6 +105,7 @@ export default function Cart() {
       <CartStudentForm
         found={foundStudent}
         student={studentData}
+        cardIdRef={cardIdRef}
         searchFn={searchStudent}
       />
     </>

@@ -4,8 +4,12 @@ import { Search as SearchIcon } from "@mui/icons-material";
 
 import { useRef } from "react";
 
-export default function CartStudentForm({ found, student, searchFn }) {
-  const cardIdRef = useRef();
+export default function CartStudentForm({
+  found,
+  student,
+  cardIdRef,
+  searchFn,
+}) {
   return (
     <Paper variant="outlined" sx={{ mt: 3, p: 3, width: "60%" }}>
       <Typography variant="h6">Student Information Form</Typography>

@@ -20,6 +20,7 @@ import Returns from "./pages/Returns";
 import Students from "./pages/Students";
 import Cart from "./pages/Cart";
 import Report from "./pages/Report";
+import TableReport from "./pages/TableReport";
 
 export const AppContext = createContext();
 
@@ -72,6 +73,10 @@ const router = createBrowserRouter([
       {
         path: "/report",
         element: <Report />,
+      },
+      {
+        path: "/table-report",
+        element: <TableReport />,
       },
     ],
   },

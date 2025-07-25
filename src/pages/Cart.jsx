@@ -2,6 +2,7 @@ import { Box, Typography, Button } from "@mui/material";
 
 import CartTable from "../components/CartTable";
 import CartStudentForm from "../components/CartStudentForm";
+import ConfirmDialog from "../components/ConfirmDialog";
 
 import { useApp } from "../App";
 
@@ -12,7 +13,8 @@ const api = import.meta.env.VITE_API;
 
 export default function Cart() {
   const { cartItems, setCartItems, setGlobalMsg } = useApp();
-  const [found, setFound] = useState(false);
+  const [foundStudent, setFoundStudent] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
 
   const removeFromCart = (id) => {
     setCartItems((prev) => prev.filter((item) => item.id !== id));
@@ -27,14 +29,14 @@ export default function Cart() {
       const res = await fetch(`${api}/students/${cardId}`, {
         credentials: "include",
       });
-      if (!res.ok) throw new Error("Failed to fetch data...", res.status);
+      if (!res.ok) throw new Error("Failed to fetch data...");
       return res.json();
     },
     onSuccess: () => {
-      setFound(true);
+      setFoundStudent(true);
     },
-    onError: (error) => {
-      setFound(false);
+    onError: () => {
+      setFoundStudent(false);
     },
   });
 
@@ -50,9 +52,10 @@ export default function Cart() {
       return res.json();
     },
     onSuccess: () => {
+      setOpenDialog(false);
       setGlobalMsg("Checkout completes successfully...");
       setCartItems([]);
-      setFound(false);
+      setFoundStudent(false);
       resetStudent();
     },
   });
@@ -63,11 +66,7 @@ export default function Cart() {
         component="form"
         onSubmit={(e) => {
           e.preventDefault();
-          const completeCartData = {
-            book_ids: cartItems.map((item) => item.id),
-            student_id: studentData?.id,
-          };
-          completeCart.mutate(completeCartData);
+          setOpenDialog(true);
         }}
         sx={{
           display: "flex",
@@ -81,14 +80,28 @@ export default function Cart() {
         <Button
           type="submit"
           variant="contained"
-          disabled={!found || cartItems.length <= 0}
+          disabled={!foundStudent || cartItems.length <= 0}
         >
           Complete Cart
         </Button>
       </Box>
+
+      <ConfirmDialog
+        msg={"Are you sure you want to checkout?"}
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        onConfirm={() => {
+          const completeCartData = {
+            book_ids: cartItems.map((item) => item.id),
+            student_id: studentData?.id,
+          };
+          completeCart.mutate(completeCartData);
+        }}
+      />
+
       <CartTable books={cartItems} removeFromCart={removeFromCart} />
       <CartStudentForm
-        found={found}
+        found={foundStudent}
         student={studentData}
         searchFn={searchStudent}
       />

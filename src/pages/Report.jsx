@@ -14,10 +14,12 @@ import {
 import ScoreCard from "../components/ScoreCard";
 
 import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 const api = import.meta.env.VITE_API;
 
 export default function Report() {
+  const navigate = useNavigate();
   const overdues = [
     {
       name: "Elon Musk",
@@ -70,7 +72,7 @@ export default function Report() {
         <Typography variant="h5" component="div">
           Report
         </Typography>
-        <Button variant="contained" onClick={() => setOpen(true)}>
+        <Button variant="contained" onClick={() => navigate("/table-report")}>
           Table Report
         </Button>
       </Box>

@@ -102,21 +102,21 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <AppContext.Provider
-        value={{
-          globalMsg,
-          setGlobalMsg,
-          globalErrMsg,
-          setGlobalErrMsg,
-          cartItems,
-          setCartItems,
-        }}
-      >
-        <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <AppContext.Provider
+          value={{
+            globalMsg,
+            setGlobalMsg,
+            globalErrMsg,
+            setGlobalErrMsg,
+            cartItems,
+            setCartItems,
+          }}
+        >
+          <CssBaseline />
           <RouterProvider router={router} />
-        </QueryClientProvider>
-        <CssBaseline />
-      </AppContext.Provider>
+        </AppContext.Provider>
+      </QueryClientProvider>
     </ThemeProvider>
   );
 }

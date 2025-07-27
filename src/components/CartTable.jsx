@@ -27,7 +27,7 @@ export default function CartTable({ books, removeFromCart }) {
           <TableBody>
             {books.map((book, idx) => {
               return (
-                <TableRow>
+                <TableRow key={book.id}>
                   <TableCell sx={{ width: 60 }}>{idx + 1}</TableCell>
                   <TableCell>{book.title}</TableCell>
                   <TableCell sx={{ width: 100 }}>

@@ -97,6 +97,7 @@ const theme = createTheme({
 
 export default function App() {
   const [globalMsg, setGlobalMsg] = useState(null);
+  const [globalErrMsg, setGlobalErrMsg] = useState(null);
   const [cartItems, setCartItems] = useState([]);
 
   return (
@@ -105,6 +106,8 @@ export default function App() {
         value={{
           globalMsg,
           setGlobalMsg,
+          globalErrMsg,
+          setGlobalErrMsg,
           cartItems,
           setCartItems,
         }}

@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 
-import { Box, Container, Snackbar } from "@mui/material";
+import { Box, Container, Snackbar, SnackbarContent } from "@mui/material";
 
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
@@ -8,7 +8,7 @@ import Sidebar from "./components/Sidebar";
 import { useApp } from "./App";
 
 export default function Template() {
-  const { globalMsg, setGlobalMsg } = useApp();
+  const { globalMsg, setGlobalMsg, globalErrMsg, setGlobalErrMsg } = useApp();
   return (
     <>
       <Header />
@@ -27,6 +27,27 @@ export default function Template() {
           onClose={() => setGlobalMsg(null)}
           message={globalMsg}
         />
+        <Snackbar
+          anchorOrigin={{
+            horizontal: "center",
+            vertical: "top",
+          }}
+          open={Boolean(globalErrMsg)}
+          autoHideDuration={6000}
+          onClose={() => setGlobalErrMsg(null)}
+        >
+          <SnackbarContent
+            message={globalErrMsg}
+            sx={{
+              backgroundColor: "#d32f2f",
+              color: "white",
+              fontWeight: 500,
+              px: 2,
+              py: 1,
+              borderRadius: 1,
+            }}
+          />
+        </Snackbar>
       </Box>
     </>
   );

@@ -13,7 +13,7 @@ const api = import.meta.env.VITE_API;
 
 export default function Cart() {
   const cardIdRef = useRef();
-  const { cartItems, setCartItems, setGlobalMsg } = useApp();
+  const { cartItems, setCartItems, setGlobalMsg, setGlobalErrMsg } = useApp();
   const [foundStudent, setFoundStudent] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -59,6 +59,9 @@ export default function Cart() {
       setFoundStudent(false);
       resetStudent();
       cardIdRef.current.value = "";
+    },
+    onError: (error) => {
+      if (error.status === 422) setGlobalErrMsg(`Error: ${data}`);
     },
   });
 

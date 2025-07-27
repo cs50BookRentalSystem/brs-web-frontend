@@ -10,12 +10,15 @@ import {
   Button,
 } from "@mui/material";
 
+import { useApp } from "../App";
+
 const api = import.meta.env.VITE_API;
 
 export default function Login() {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const { setGlobalErrMsg } = useApp();
 
   return (
     <Box
@@ -65,7 +68,9 @@ export default function Login() {
                 pass: password,
               }),
             });
-            res.ok ? navigate("/") : alert("Login failed...");
+            res.ok
+              ? navigate("/")
+              : setGlobalErrMsg("Error: Failed to login...");
           }}
           sx={{
             display: "flex",

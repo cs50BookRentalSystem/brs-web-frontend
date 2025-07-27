@@ -27,7 +27,7 @@ export default function Cart() {
     reset: resetStudent,
   } = useMutation({
     mutationFn: async (cardId) => {
-      const res = await fetch(`${api}/students/${cardId}`, {
+      const res = await fetch(`${api}/students?card_id=${cardId}`, {
         credentials: "include",
       });
       if (!res.ok) throw new Error("Failed to fetch data...");
@@ -49,7 +49,11 @@ export default function Cart() {
         credentials: "include",
         body: JSON.stringify(data),
       });
-      if (!res.ok) throw new Error("Failed to fetch data...");
+      if (!res.ok) {
+        const error = new Error("Failed to complete cart...");
+        error.status = res.status;
+        throw error;
+      }
       return res.json();
     },
     onSuccess: () => {
@@ -61,7 +65,8 @@ export default function Cart() {
       cardIdRef.current.value = "";
     },
     onError: (error) => {
-      if (error.status === 422) setGlobalErrMsg(`Error: ${data}`);
+      if (error.status === 422)
+        setGlobalErrMsg("Error: there is an issue with stock...");
     },
   });
 

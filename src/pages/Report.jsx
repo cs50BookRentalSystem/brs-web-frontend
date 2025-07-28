@@ -20,27 +20,11 @@ const api = import.meta.env.VITE_API;
 
 export default function Report() {
   const navigate = useNavigate();
-  const overdues = [
-    {
-      name: "Elon Musk",
-      phone: "0923456789",
-      count: 3,
-      date: "2025-05-22",
-      days: 5,
-    },
-    {
-      name: "Elon Musk",
-      phone: "0923456789",
-      count: 3,
-      date: "2025-05-22",
-      days: 5,
-    },
-  ];
 
   const { isLoading, isError, error, data } = useQuery({
     queryKey: ["report"],
     queryFn: async () => {
-      const res = await fetch(`${api}/reports`, {
+      const res = await fetch(`${api}/reports?limit=10`, {
         credentials: "include",
       });
       if (!res.ok) throw new Error("Failed to fetch data...");
@@ -95,15 +79,15 @@ export default function Report() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {overdues.map((item, idx) => {
+              {data.top_overdue.map((item, idx) => {
                 return (
                   <TableRow key={idx}>
                     <TableCell sx={{ width: 60 }}>{idx + 1}</TableCell>
-                    <TableCell>{item.name}</TableCell>
+                    <TableCell>{item.student_name}</TableCell>
                     <TableCell>{item.phone}</TableCell>
-                    <TableCell>{item.count}</TableCell>
-                    <TableCell>{item.date}</TableCell>
-                    <TableCell>{item.days}</TableCell>
+                    <TableCell>{item.total_books}</TableCell>
+                    <TableCell>{item.date_rented}</TableCell>
+                    <TableCell>{item.days_overdue}</TableCell>
                   </TableRow>
                 );
               })}

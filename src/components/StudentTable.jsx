@@ -9,8 +9,11 @@ export default function StudentTable({
   rows,
   paginationModel,
   setPaginationModel,
+  openDialog,
+  setOpenDialog,
+  deleteStudent,
 }) {
-  const [openDialog, setOpenDialog] = useState(false);
+  const [studentId, setStudentId] = useState();
   const columns = [
     { field: "first_name", headerName: "First Name", flex: 1 },
     { field: "last_name", headerName: "Last Name", flex: 1 },
@@ -27,7 +30,7 @@ export default function StudentTable({
           <IconButton
             onClick={() => {
               setOpenDialog(true);
-              console.log(params.row.id);
+              setStudentId(params.row.id);
             }}
             color="error"
             aria-label="Delete"
@@ -57,7 +60,7 @@ export default function StudentTable({
         msg="Are you sure you want to delete it?"
         open={openDialog}
         onClose={() => setOpenDialog(false)}
-        onConfirm={() => {}}
+        onConfirm={() => deleteStudent(studentId)}
       />
     </>
   );

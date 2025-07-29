@@ -15,6 +15,7 @@ export default function Students() {
     page: 0,
     pageSize: 5,
   });
+  const [openConfirm, setOpenConfirm] = useState(false);
 
   // get the list of students
   const { isLoading, isError, error, data } = useQuery({
@@ -36,7 +37,7 @@ export default function Students() {
         body: JSON.stringify(data),
       });
       if (!res.ok) throw new Error("Failed to create new student...");
-      return await res.json();
+      return res.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["students"] });
@@ -45,8 +46,21 @@ export default function Students() {
     },
   });
 
-  // todo: api integration for deleting student
-  const deleteFn = () => {};
+  // delete the student
+  const deleteFn = useMutation({
+    mutationFn: async (studentId) => {
+      const res = await fetch(`${api}/students/${studentId}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error("Failed to delete student...");
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["students"] });
+      setOpenConfirm(false);
+      setGlobalMsg("Student has been deleted...");
+    },
+  });
 
   if (isError) {
     return (
@@ -83,6 +97,9 @@ export default function Students() {
         rows={data.results}
         paginationModel={paginationModel}
         setPaginationModel={setPaginationModel}
+        openDialog={openConfirm}
+        setOpenDialog={setOpenConfirm}
+        deleteStudent={deleteFn.mutate}
       />
     </>
   );

@@ -20,16 +20,19 @@ import dayjs from "dayjs";
 const api = import.meta.env.VITE_API;
 const LIMIT = 10;
 
-export default function TableReport() {
+export default function Overdues() {
   const [page, setPage] = useState(1);
   const offset = (page - 1) * LIMIT;
 
   const { isError, isLoading, error, data, refetch } = useQuery({
-    queryKey: ["rents", page],
+    queryKey: ["overdues", page],
     queryFn: async () => {
-      const res = await fetch(`${api}/rents?limit=${LIMIT}&offset=${offset}`, {
-        credentials: "include",
-      });
+      const res = await fetch(
+        `${api}/overdues?limit=${LIMIT}&offset=${offset}`,
+        {
+          credentials: "include",
+        }
+      );
       if (!res.ok) throw new Error("Failed to fetch data...");
       return res.json();
     },
@@ -57,7 +60,7 @@ export default function TableReport() {
         }}
       >
         <Typography variant="h5" component="div">
-          Books Currently Rented
+          Overdues
         </Typography>
       </Box>
       <Box sx={{ mt: 3 }}>
@@ -66,32 +69,17 @@ export default function TableReport() {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Book Name</TableCell>
                   <TableCell>Student Name</TableCell>
+                  <TableCell>Phone</TableCell>
+                  <TableCell># Books</TableCell>
                   <TableCell>Date Rented</TableCell>
+                  <TableCell>Days Overdue</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>
                     <TextField
                       variant="outlined"
-                      placeholder="Search by Book Name"
-                      size="small"
-                      fullWidth
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <TextField
-                      variant="outlined"
                       placeholder="Search by Student Name"
-                      size="small"
-                      fullWidth
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <TextField
-                      type="date"
-                      variant="outlined"
-                      placeholder="Search by Date Rented"
                       size="small"
                       fullWidth
                     />
@@ -101,11 +89,13 @@ export default function TableReport() {
               <TableBody>
                 {data.results.map((row) => (
                   <TableRow key={row.rent_id}>
-                    <TableCell>{row.book_title}</TableCell>
                     <TableCell>{row.student_name}</TableCell>
+                    <TableCell>{row.phone}</TableCell>
+                    <TableCell>{row.total_books}</TableCell>
                     <TableCell>
                       {dayjs(row.rented_date).format("YYYY-MM-DD")}
                     </TableCell>
+                    <TableCell>{row.days_overdue}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

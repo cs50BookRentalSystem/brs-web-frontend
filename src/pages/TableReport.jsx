@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 
 const api = import.meta.env.VITE_API;
@@ -23,17 +23,45 @@ const LIMIT = 10;
 export default function TableReport() {
   const [page, setPage] = useState(1);
   const offset = (page - 1) * LIMIT;
+  const [filters, setFilters] = useState({
+    book_name: "",
+    student_name: "",
+    date: "",
+  });
+  const [trigger, setTrigger] = useState(0);
 
   const { isError, isLoading, error, data, refetch } = useQuery({
-    queryKey: ["rents", page],
+    queryKey: ["rents", page, trigger],
     queryFn: async () => {
-      const res = await fetch(`${api}/rents?limit=${LIMIT}&offset=${offset}`, {
-        credentials: "include",
+      const query = new URLSearchParams();
+      Object.entries(filters).forEach(([key, val]) => {
+        if (val?.trim()) {
+          query.append(key, val.trim());
+        }
       });
+      console.log(query);
+      const res = await fetch(
+        `${api}/rents?limit=${LIMIT}&offset=${offset}&${query.toString()}`,
+        {
+          credentials: "include",
+        }
+      );
       if (!res.ok) throw new Error("Failed to fetch data...");
       return res.json();
     },
   });
+
+  useEffect(() => {
+    if (filters.date) {
+      refetch();
+    }
+  }, [filters.date]);
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      setTrigger((prev) => prev + 1);
+    }
+  };
 
   if (isError) {
     return (
@@ -73,6 +101,11 @@ export default function TableReport() {
                 <TableRow>
                   <TableCell>
                     <TextField
+                      value={filters.book_name}
+                      onChange={(e) =>
+                        setFilters((f) => ({ ...f, book_name: e.target.value }))
+                      }
+                      onKeyDown={handleKeyDown}
                       variant="outlined"
                       placeholder="Search by Book Name"
                       size="small"
@@ -81,6 +114,14 @@ export default function TableReport() {
                   </TableCell>
                   <TableCell>
                     <TextField
+                      value={filters.student_name}
+                      onChange={(e) =>
+                        setFilters((f) => ({
+                          ...f,
+                          student_name: e.target.value,
+                        }))
+                      }
+                      onKeyDown={handleKeyDown}
                       variant="outlined"
                       placeholder="Search by Student Name"
                       size="small"
@@ -89,6 +130,10 @@ export default function TableReport() {
                   </TableCell>
                   <TableCell>
                     <TextField
+                      value={filters.date}
+                      onChange={(e) =>
+                        setFilters((f) => ({ ...f, date: e.target.value }))
+                      }
                       type="date"
                       variant="outlined"
                       placeholder="Search by Date Rented"

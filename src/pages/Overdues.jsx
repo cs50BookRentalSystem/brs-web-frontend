@@ -16,6 +16,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { useState } from "react";
 import dayjs from "dayjs";
+import Sad from "../components/Sad";
 
 const api = import.meta.env.VITE_API;
 const LIMIT = 10;
@@ -105,7 +106,7 @@ export default function Overdues() {
                 {data.results.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={6} align="center">
-                      No data available...
+                      <Sad msg={"No data available..."} Sad />
                     </TableCell>
                   </TableRow>
                 ) : (

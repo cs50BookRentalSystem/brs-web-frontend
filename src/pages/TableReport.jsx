@@ -17,6 +17,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 
+import Sad from "../components/Sad";
+
 const api = import.meta.env.VITE_API;
 const LIMIT = 10;
 
@@ -144,15 +146,23 @@ export default function TableReport() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data.results.map((row) => (
-                  <TableRow key={row.rent_id}>
-                    <TableCell>{row.book_title}</TableCell>
-                    <TableCell>{row.student_name}</TableCell>
-                    <TableCell>
-                      {dayjs(row.rented_date).format("YYYY-MM-DD")}
+                {data.results.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={3} align="center">
+                      <Sad msg={"No data available..."} Sad />
                     </TableCell>
                   </TableRow>
-                ))}
+                ) : (
+                  data.results.map((row) => (
+                    <TableRow key={row.rent_id}>
+                      <TableCell>{row.book_title}</TableCell>
+                      <TableCell>{row.student_name}</TableCell>
+                      <TableCell>
+                        {dayjs(row.rented_date).format("YYYY-MM-DD")}
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
               </TableBody>
             </Table>
           </TableContainer>

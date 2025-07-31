@@ -23,9 +23,11 @@ const LIMIT = 10;
 export default function Overdues() {
   const [page, setPage] = useState(1);
   const offset = (page - 1) * LIMIT;
+  const [studentFilter, setStudentFilter] = useState();
+  const [trigger, setTrigger] = useState(0);
 
-  const { isError, isLoading, error, data, refetch } = useQuery({
-    queryKey: ["overdues", page],
+  const { isError, isLoading, error, data } = useQuery({
+    queryKey: ["overdues", page, trigger],
     queryFn: async () => {
       const res = await fetch(
         `${api}/overdues?limit=${LIMIT}&offset=${offset}`,
@@ -37,6 +39,12 @@ export default function Overdues() {
       return res.json();
     },
   });
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      setTrigger((prev) => prev + 1);
+    }
+  };
 
   if (isError) {
     return (
@@ -78,26 +86,41 @@ export default function Overdues() {
                 <TableRow>
                   <TableCell>
                     <TextField
+                      value={studentFilter}
+                      onChange={(e) => setStudentFilter(e.target.value)}
+                      onKeyDown={handleKeyDown}
                       variant="outlined"
                       placeholder="Search by Student Name"
                       size="small"
                       fullWidth
                     />
                   </TableCell>
+                  <TableCell />
+                  <TableCell />
+                  <TableCell />
+                  <TableCell />
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data.results.map((row) => (
-                  <TableRow key={row.rent_id}>
-                    <TableCell>{row.student_name}</TableCell>
-                    <TableCell>{row.phone}</TableCell>
-                    <TableCell>{row.total_books}</TableCell>
-                    <TableCell>
-                      {dayjs(row.rented_date).format("YYYY-MM-DD")}
+                {data.results.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={6} align="center">
+                      No data available...
                     </TableCell>
-                    <TableCell>{row.days_overdue}</TableCell>
                   </TableRow>
-                ))}
+                ) : (
+                  data.results.map((row) => (
+                    <TableRow key={row.rent_id}>
+                      <TableCell>{row.student_name}</TableCell>
+                      <TableCell>{row.phone}</TableCell>
+                      <TableCell>{row.total_books}</TableCell>
+                      <TableCell>
+                        {dayjs(row.rented_date).format("YYYY-MM-DD")}
+                      </TableCell>
+                      <TableCell>{row.days_overdue}</TableCell>
+                    </TableRow>
+                  ))
+                )}
               </TableBody>
             </Table>
           </TableContainer>

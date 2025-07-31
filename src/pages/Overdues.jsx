@@ -106,7 +106,7 @@ export default function Overdues() {
               <TableBody>
                 {data.results.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={6} align="center">
+                    <TableCell colSpan={5} align="center">
                       <Sad msg={"No data available..."} Sad />
                     </TableCell>
                   </TableRow>

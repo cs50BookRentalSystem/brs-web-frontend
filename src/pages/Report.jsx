@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 
 import ScoreCard from "../components/ScoreCard";
+import Sad from "../components/Sad";
 
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
@@ -65,7 +66,22 @@ export default function Report() {
         <ScoreCard title={"# Student Rentees"} value={data.total_students} />
       </Box>
       <Box sx={{ mt: 3, border: 1, borderColor: "grey.400", p: 3 }}>
-        <Typography variant="h7">Top 10 Overdues</Typography>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Typography variant="h7">Top 10 Overdues</Typography>
+          <Button
+            variant="text"
+            onClick={() => navigate("/overdues")}
+            sx={{ textDecoration: "underline", padding: 0, minWidth: 0 }}
+          >
+            Full Report
+          </Button>
+        </Box>
         <TableContainer sx={{ mt: 1 }}>
           <Table size="small">
             <TableHead>
@@ -79,8 +95,14 @@ export default function Report() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data.top_overdue.map((item, idx) => {
-                return (
+              {data.top_overdue.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={6} align="center">
+                    <Sad msg={"No data available..."} Sad />
+                  </TableCell>
+                </TableRow>
+              ) : (
+                data.top_overdue.map((item, idx) => (
                   <TableRow key={idx}>
                     <TableCell sx={{ width: 60 }}>{idx + 1}</TableCell>
                     <TableCell>{item.student_name}</TableCell>
@@ -89,8 +111,8 @@ export default function Report() {
                     <TableCell>{item.date_rented}</TableCell>
                     <TableCell>{item.days_overdue}</TableCell>
                   </TableRow>
-                );
-              })}
+                ))
+              )}
             </TableBody>
           </Table>
         </TableContainer>
@@ -107,7 +129,13 @@ export default function Report() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data.top_books &&
+              {data.top_books.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={3} align="center">
+                    <Sad msg={"No data available..."} Sad />
+                  </TableCell>
+                </TableRow>
+              ) : (
                 data.top_books.map((item, idx) => {
                   return (
                     <TableRow key={idx}>
@@ -116,7 +144,8 @@ export default function Report() {
                       <TableCell>{item.rented_count}</TableCell>
                     </TableRow>
                   );
-                })}
+                })
+              )}
             </TableBody>
           </Table>
         </TableContainer>

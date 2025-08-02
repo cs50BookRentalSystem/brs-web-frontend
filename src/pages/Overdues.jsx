@@ -25,14 +25,16 @@ const LIMIT = 10;
 export default function Overdues() {
   const [page, setPage] = useState(1);
   const offset = (page - 1) * LIMIT;
-  const [studentFilter, setStudentFilter] = useState();
+  const [studentFilter, setStudentFilter] = useState("");
   const [trigger, setTrigger] = useState(0);
 
   const { isError, isLoading, error, data } = useQuery({
     queryKey: ["overdues", page, trigger],
     queryFn: async () => {
+      const query = new URLSearchParams();
+      if (studentFilter) query.append("student_card_id", studentFilter.trim());
       const res = await fetch(
-        `${api}/overdues?limit=${LIMIT}&offset=${offset}`,
+        `${api}/overdues?limit=${LIMIT}&offset=${offset}&${query.toString()}`,
         {
           credentials: "include",
         }
@@ -79,6 +81,7 @@ export default function Overdues() {
             <Table>
               <TableHead>
                 <TableRow>
+                  <TableCell>Student Card ID</TableCell>
                   <TableCell>Student Name</TableCell>
                   <TableCell>Phone</TableCell>
                   <TableCell># Books</TableCell>
@@ -92,11 +95,12 @@ export default function Overdues() {
                       onChange={(e) => setStudentFilter(e.target.value)}
                       onKeyDown={handleKeyDown}
                       variant="outlined"
-                      placeholder="Search by Student Name"
+                      placeholder="Search by Student Card ID"
                       size="small"
                       fullWidth
                     />
                   </TableCell>
+                  <TableCell />
                   <TableCell />
                   <TableCell />
                   <TableCell />
@@ -112,7 +116,8 @@ export default function Overdues() {
                   </TableRow>
                 ) : (
                   data.results.map((row) => (
-                    <TableRow key={row.rent_id}>
+                    <TableRow key={row.cartId}>
+                      <TableCell>{row.card_id}</TableCell>
                       <TableCell>{row.student_name}</TableCell>
                       <TableCell>{row.phone}</TableCell>
                       <TableCell>{row.total_books}</TableCell>

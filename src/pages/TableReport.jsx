@@ -41,7 +41,6 @@ export default function TableReport() {
           query.append(key, val.trim());
         }
       });
-      console.log(query);
       const res = await fetch(
         `${api}/rents?limit=${LIMIT}&offset=${offset}&${query.toString()}`,
         {

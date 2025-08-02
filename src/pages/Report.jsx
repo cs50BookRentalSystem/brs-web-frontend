@@ -16,6 +16,7 @@ import Sad from "../components/Sad";
 
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
 
 const api = import.meta.env.VITE_API;
 
@@ -90,7 +91,7 @@ export default function Report() {
                 <TableCell>Student</TableCell>
                 <TableCell>Phone</TableCell>
                 <TableCell>Num of Books</TableCell>
-                <TableCell>Due Date</TableCell>
+                <TableCell>Date Rented</TableCell>
                 <TableCell>Days</TableCell>
               </TableRow>
             </TableHead>
@@ -108,7 +109,9 @@ export default function Report() {
                     <TableCell>{item.student_name}</TableCell>
                     <TableCell>{item.phone}</TableCell>
                     <TableCell>{item.total_books}</TableCell>
-                    <TableCell>{item.date_rented}</TableCell>
+                    <TableCell>
+                      {dayjs(item.date_rented).format("YYYY-MM-DD")}
+                    </TableCell>
                     <TableCell>{item.days_overdue}</TableCell>
                   </TableRow>
                 ))

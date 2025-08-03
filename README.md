@@ -24,6 +24,18 @@ This project was a collaborative effort by two team members:
 - Danny - Frontend Development
 - Dther - Backend Development
 
+#### Our Story
+
+Every great project starts with a spark — and for us, it began with a passionate brainstorming session. As a team, we explored a range of ideas, but the concept of a **Book Rental System** stood out as both practical and challenging. It was the perfect opportunity to implement a variety of core functionalities like adding books, managing loans, and processing returns — a full-fledged CRUD application we could truly learn from.
+
+We kicked things off by collaboratively crafting a detailed **Product Requirements Document** — the blueprint that would guide every step of our development. With a clear vision in place, we moved on to designing the user experience. Using **Whimsical**, we sketched out intuitive wireframes that brought our ideas to life and allowed us to visualize the system from a user's perspective. For the backend structure, we carefully designed the **database schema** on **dbdiagram.io**, making sure every entity and relationship was well thought-out and scalable.
+
+Roles formed naturally within the team. My teammate, who has a strong background in backend development, volunteered to take on that part of the system. This gave me the exciting opportunity to dive deep into frontend development — a challenge I fully embraced.
+
+I spent time researching modern frontend frameworks and libraries, comparing performance, flexibility, and community support. After much deliberation, I chose **React.js** — not just for its popularity, but for the vibrant ecosystem and career value it brings. Learning and building with React has been a transformative experience. It pushed me to write cleaner code, think in components, and understand state management — all crucial skills for any modern web developer.
+
+This project has been more than just a coding exercise. It’s been a hands-on journey through real-world software development — from idea to execution — and a milestone in our growth as developers.
+
 ---
 ### Product Requirements Document
 #### Background
